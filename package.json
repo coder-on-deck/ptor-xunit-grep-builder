@@ -1,8 +1,8 @@
 {
   "name": "ptor-xunit-grep-builder",
   "version": "0.0.0",
-  "scripts" : {
-    "test" : "standard"
+  "scripts": {
+    "test": "standard"
   },
   "bin": {
     "ptor-xunit-grep-builder": "rerun-ptor.js"
