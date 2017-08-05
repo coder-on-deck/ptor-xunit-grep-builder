@@ -57,7 +57,7 @@ if (args.tests) {
 
   const results = _(files)
         .map((f) => ({filename: f, content: fs.readFileSync(f).toString()}))
-        .map(({filename, content}) => ({filename: path.basename(filename, fileSuffix), content: xml2json.xml2js(content)}))
+        .map(({filename, content}) => ({filename: '**/' + path.basename(filename, fileSuffix), content: xml2json.xml2js(content)}))
         .map(({filename, content}) => ({filename, failures: _([content.testsuites.testsuite]).flatten().some((t) => t._failures > 0)}))
         .filter(({failures}) => failures > 0)
         .map('filename')
