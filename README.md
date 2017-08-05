@@ -48,14 +48,23 @@ rm -rf ./reports/protractor/**/failed-test-*.xml
 run_tests () {
     print_attempt
     echo PTOR_SUITE=${PTOR_SUITE}
-    GREP_PARAMS=`ptor-xunit-grep-builder --files ./reports/protractor/**/failed-test-*.xml`
+    GREP_PARAMS=`ptor-xunit-grep-builder --tests --files=./reports/protractor/*/each/*.xml`
+    SPECS_PARAMS=`ptor-xunit-grep-builder --filenames --files=./reports/protractor/*/each/*.xml`
     echo "GREP PARAMS=${GREP_PARAMS}"
+    echo "SPECS PARAMS=${SPECS_PARAMS}"
+
     if  [ "$GREP_PARAMS" = "" ]; then
         echo "ERROR::: grep params is empty but retrying..."
         exit 1
     fi
+
+    if  [ "$SPECS_PARAMS" = "" ]; then
+        echo "ERROR::: specs params is empty but retrying..."
+        exit 1
+    fi
+
     clean_reports
-    ./node_modules/.bin/protractor --suite=${PTOR_SUITE} --grep="${GREP_PARAMS}" protractor.conf.js
+    ./node_modules/.bin/protractor --specs=${SPECS_PARAMS} --grep="${GREP_PARAMS}" protractor.conf.js
 }
 
 first_run () {
