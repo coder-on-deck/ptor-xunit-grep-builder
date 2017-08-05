@@ -19,7 +19,7 @@ configure your protractor to export reports to xml (in `onPrepare()` phase )
 // for sharded configuration
 jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter({
   consolidateAll: true,
-  savePath: savePath + '/xmls',
+  savePath: savePath + '/each',
   filePrefix: 'failed-test-' + uuid()
 }));
 
@@ -28,6 +28,27 @@ jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter({
   consolidateAll: true,
   savePath: savePath
 }));
+
+// alternatively, to have support for specs as well
+// tested on configuration for running in parallel. 
+return global.browser.getProcessedConfig().then((config) => {
+  const filename = () => {
+    try {
+      return config.specs[0].split('/').slice(-1)[0]; // return entire name (e.g. name.ptor.js) - this will be appended with .xml later on
+    } catch (e) {
+      return 'failed-test-' + uuid();
+    }
+  };
+  const filenameValue = filename();
+  global.jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter({
+    consolidateAll: true,
+    savePath: savePath + '/each/',
+    filePrefix: filenameValue
+  }));
+
+  logger.info('filename is', filenameValue);
+});
+
 ```
 
 add a retry code to you build script - her is an example
