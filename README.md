@@ -97,3 +97,10 @@ i=1
 # run first time and then retry over and over again
 first_run || ( for i in 2 3 4 5 6 7 8 9; do run_tests $i && break || sleep 5; done )
 ```
+
+
+# Roadmap
+ - [ ] tests
+ - [ ] Make usable with less boilerplate
+ - [ ] buzz with post and publishing
+ 
