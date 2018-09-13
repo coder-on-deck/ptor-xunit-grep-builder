@@ -40,8 +40,8 @@ if (args.count && args.tests) {
         .map('testcase')
         .flatten()
         .map((t) => `${t._classname} ${t._name}`)
-        .size();
-  console.log(count);
+        .size()
+  console.log(count)
 } else if (args.tests) {
     // console.log('finding tests', files.length, args.files);
   const grepArgs = _(files)
