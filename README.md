@@ -30,7 +30,7 @@ jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter({
 }));
 
 // alternatively, to have support for specs as well
-// tested on configuration for running in parallel. 
+// tested on configuration for running in parallel.
 return global.browser.getProcessedConfig().then((config) => {
   const filename = () => {
     try {
@@ -70,6 +70,8 @@ run_tests () {
     print_attempt
     echo PTOR_SUITE=${PTOR_SUITE}
     GREP_PARAMS=`ptor-xunit-grep-builder --tests --files=./reports/protractor/*/each/*.xml`
+    echo "count of all tests"
+    ptor-xunit-grep-builder --count --tests --files=./reports/protractor/*/each/*.xml
     SPECS_PARAMS=`ptor-xunit-grep-builder --filenames --files=./reports/protractor/*/each/*.xml`
     echo "GREP PARAMS=${GREP_PARAMS}"
     echo "SPECS PARAMS=${SPECS_PARAMS}"
@@ -103,4 +105,3 @@ first_run || ( for i in 2 3 4 5 6 7 8 9; do run_tests $i && break || sleep 5; do
  - [ ] tests
  - [ ] Make usable with less boilerplate
  - [ ] buzz with post and publishing
- 

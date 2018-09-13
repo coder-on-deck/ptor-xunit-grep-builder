@@ -11,32 +11,38 @@ const path = require('path')
 const files = glob.sync(args.files || './**/failed-tests-*.xml')
 if (args.help) {
   console.log(`
-        ${chalk.blue('command:')}
-        
+        Writes all the failing test cases found in xunit reports. to be used with protractor --grep option
+
             ptor-xunit-grep-builder ${chalk.red('--tests')} ${chalk.red('--files')}="./reports/protractor/**/*.xml"
-        
-        ${chalk.blue('description:')} 
-        
-            Writes all the failing test cases found in xunit reports. to be used with protractor --grep option
 
+        Writes count of all the failing test cases found in xunit reports.
 
+          ptor-xunit-grep-builder ${chalk.red('--count')} ${chalk.red('--tests')} ${chalk.red('--files')}="./reports/protractor/**/*.xml"
 
+        Writes all the report filenames with failing tests. to be used with protractor --specs option
 
-        ${chalk.blue('command:')}
-        
             ptor-xunit-grep-build ${chalk.red('--filenames')} ${chalk.red('--file-suffix')} .xml ${chalk.red('--files')}="./reports/protractor/**/*.xml"
-            
-        ${chalk.blue('description:')}
-            
-            Writes all the report filenames with failing tests. to be used with protractor --specs option
-            
-            
-            
+
+
+
+
     `)
   process.exit(0)
 }
-
-if (args.tests) {
+if (args.count && args.tests) {
+  const count = _(files)
+        .map((f) => fs.readFileSync(f).toString())
+        .map((xmlContent) => xml2json.xml2js(xmlContent))
+        .map('testsuites')
+        .map('testsuite')
+        .flatten()
+        .filter((t) => t._failures > 0)
+        .map('testcase')
+        .flatten()
+        .map((t) => `${t._classname} ${t._name}`)
+        .size();
+  console.log(count);
+} else if (args.tests) {
     // console.log('finding tests', files.length, args.files);
   const grepArgs = _(files)
         .map((f) => fs.readFileSync(f).toString())
