@@ -50,9 +50,9 @@ if (args.count && args.tests) {
         .map('testsuites')
         .map('testsuite')
         .flatten()
-        .filter((t) => t._failures > 0)
         .map('testcase')
         .flatten()
+        .filter(t => t.failure)
         .map((t) => `${t._classname} ${t._name}`)
         .value().join('|')
 
