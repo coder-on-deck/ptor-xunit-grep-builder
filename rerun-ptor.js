@@ -52,7 +52,7 @@ if (args.count && args.tests) {
         .flatten()
         .map('testcase')
         .flatten()
-        .filter(t => t.failure)
+        .filter(t => t && t.failure)
         .map((t) => `${t._classname} ${t._name}`)
         .value().join('|')
 
